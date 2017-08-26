@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,6 +69,8 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   @Override
   public void showCars(List<Taxi> taxis) {
     getActivity().runOnUiThread(() -> {
+      mainList.setLayoutManager(new LinearLayoutManager(getContext()));
+      mainList.setAdapter(new CarsAdapter(taxis));
       Log.d(TAG, "showCars: here i am!");
     });
   }
@@ -89,6 +92,16 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   @Override
   public void showDetailedInfo(Taxi taxi) {
 
+  }
+
+  public boolean handleBack() {
+    if ((bottomSheetBehavior.getState()
+        & (BottomSheetBehavior.STATE_EXPANDED | BottomSheetBehavior.STATE_COLLAPSED)) != 0) {
+      bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+      mainList.scrollToPosition(0);
+      return true;
+    }
+    return false;
   }
 
   @Override
