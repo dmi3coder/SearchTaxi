@@ -16,6 +16,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import io.github.dmi3coder.searchtaxi.R;
 import io.github.dmi3coder.searchtaxi.Utils;
 import io.github.dmi3coder.searchtaxi.cars.CarsContract.Presenter;
@@ -25,13 +30,16 @@ import java.util.List;
 /**
  * Created by dim3coder on 8/26/17.
  */
-public class CarsFragment extends Fragment implements CarsContract.View, OnClickListener {
+public class CarsFragment extends Fragment implements CarsContract.View, OnClickListener,
+    OnMapReadyCallback {
 
   private static final String TAG = "CarsFragment";
   private FloatingActionButton searchButton;
   private BottomSheetBehavior<RecyclerView> bottomSheetBehavior;
   private RecyclerView mainList;
   private Presenter presenter;
+  private SupportMapFragment mapfragment;
+  private GoogleMap googleMap;
 
   public CarsFragment() {
     new CarsPresenter(this);
@@ -46,9 +54,8 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
     mainList = findById(view, R.id.cars_bottom_sheet);
 
     setupBottomSheet();
+    setupMap();
     searchButton.setOnClickListener(this);
-
-    presenter.start();
     return view;
   }
 
@@ -65,11 +72,19 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
       @Override
       public void onSlide(@NonNull View bottomSheet, float slideOffset) {
         Log.d(TAG, "onSlide: " + slideOffset);
-        if(slideOffset<0) return;
+        if (slideOffset < 0) {
+          return;
+        }
         int alpha = (int) (200 * slideOffset);
         bottomSheet.setBackgroundColor(Color.argb(alpha, 255, 255, 255));
       }
     });
+  }
+
+  private void setupMap() {
+    mapfragment = (SupportMapFragment) getChildFragmentManager()
+        .findFragmentById(R.id.map);
+    mapfragment.getMapAsync(this);
   }
 
   @Override
@@ -84,10 +99,16 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
 
   @Override
   public void showCars(List<Taxi> taxis) {
+    Log.d(TAG, "showCars: ");
     getActivity().runOnUiThread(() -> {
       mainList.setLayoutManager(new LinearLayoutManager(getContext()));
-      mainList.setAdapter(new CarsAdapter(taxis));
-      Log.d(TAG, "showCars: here i am!");
+      mainList.setAdapter(new CarsAdapter(taxis,googleMap));
+      for (int i = 0; i < taxis.size(); i++) {
+        Taxi taxi = taxis.get(i);
+        googleMap.addMarker(new MarkerOptions()
+            .position(new LatLng(taxi.getCoordinates()[1], taxi.getCoordinates()[0]))
+            .title(taxi.getName()));
+      }
     });
   }
 
@@ -128,5 +149,11 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
 
   private <T extends View> T findById(View v, int id) {
     return v.findViewById(id);
+  }
+
+  @Override
+  public void onMapReady(GoogleMap googleMap) {
+    this.googleMap = googleMap;
+    presenter.start();
   }
 }
