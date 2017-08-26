@@ -2,6 +2,7 @@ package io.github.dmi3coder.searchtaxi;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import io.github.dmi3coder.searchtaxi.cars.CarsFragment;
 
 public class MainActivity extends AppCompatActivity {
 

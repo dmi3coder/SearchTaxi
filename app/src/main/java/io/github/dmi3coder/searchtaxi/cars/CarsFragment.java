@@ -1,4 +1,4 @@
-package io.github.dmi3coder.searchtaxi;
+package io.github.dmi3coder.searchtaxi.cars;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import io.github.dmi3coder.searchtaxi.R;
+import io.github.dmi3coder.searchtaxi.Utils;
 
 /**
  * Created by dim3coder on 8/26/17.
@@ -28,6 +30,8 @@ public class CarsFragment extends Fragment {
     mainList = findById(view, R.id.cars_bottom_sheet);
 
     setupBottomSheet();
+    searchButton
+        .setOnClickListener(v -> bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED));
 
     return view;
   }
@@ -36,11 +40,11 @@ public class CarsFragment extends Fragment {
   private void setupBottomSheet() {
     bottomSheetBehavior = BottomSheetBehavior.from(mainList);
     bottomSheetBehavior.setHideable(true);
-    bottomSheetBehavior.setPeekHeight(200);
+    bottomSheetBehavior.setPeekHeight((int) Utils.convertDpToPixel(192, getContext()));
     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
   }
 
-  public <T extends View> T findById(View v, int id) {
+  private <T extends View> T findById(View v, int id) {
     return v.findViewById(id);
   }
 }
