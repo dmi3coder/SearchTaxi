@@ -1,3 +1,7 @@
 <resources>
   <string name="app_name">SearchTaxi</string>
+  <string name="interior_prefixed">Interior: %s</string>
+  <string name="exterior_prefixed">Exterior: %s</string>
+  <string name="good_mark">good</string>
+  <string name="unacceptable_mark">unacceptable</string>
 </resources>
