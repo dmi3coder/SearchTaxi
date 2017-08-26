@@ -1,5 +1,6 @@
 package io.github.dmi3coder.searchtaxi.cars;
 
+import android.support.annotation.StringRes;
 import io.github.dmi3coder.searchtaxi.BaseContract.BasePresenter;
 import io.github.dmi3coder.searchtaxi.BaseContract.BaseView;
 import io.github.dmi3coder.searchtaxi.data.Taxi;
@@ -11,13 +12,20 @@ import java.util.List;
 public interface CarsContract {
 
   interface View extends BaseView<Presenter> {
+
     void showCars(List<Taxi> taxis);
+
     void setLoading(boolean loading);
+
     void showDetailedInfo(Taxi taxi);
+
+    void setError(@StringRes int errorResId);
   }
 
   interface Presenter extends BasePresenter {
+
     void requestReload();
+
     void requestDetailedInfo(Taxi taxi);
   }
 

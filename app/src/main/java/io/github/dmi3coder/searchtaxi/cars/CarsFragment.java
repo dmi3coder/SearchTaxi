@@ -6,6 +6,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,10 +23,15 @@ import java.util.List;
  */
 public class CarsFragment extends Fragment implements CarsContract.View, OnClickListener {
 
+  private static final String TAG = "CarsFragment";
   private FloatingActionButton searchButton;
   private BottomSheetBehavior<RecyclerView> bottomSheetBehavior;
   private RecyclerView mainList;
   private Presenter presenter;
+
+  public CarsFragment() {
+    new CarsPresenter(this);
+  }
 
   @Nullable
   @Override
@@ -38,22 +44,21 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
     setupBottomSheet();
     searchButton.setOnClickListener(this);
 
+    presenter.start();
     return view;
   }
-
 
   private void setupBottomSheet() {
     bottomSheetBehavior = BottomSheetBehavior.from(mainList);
     bottomSheetBehavior.setHideable(true);
     bottomSheetBehavior.setPeekHeight((int) Utils.convertDpToPixel(192, getContext()));
-    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
   }
 
   @Override
   public void onClick(View view) {
     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
   }
-
 
   @Override
   public void setPresenter(Presenter presenter) {
@@ -62,25 +67,35 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
 
   @Override
   public void showCars(List<Taxi> taxis) {
-
+    getActivity().runOnUiThread(() -> {
+      Log.d(TAG, "showCars: here i am!");
+    });
   }
 
   @Override
   public void setLoading(boolean loading) {
-    if (loading) {
-      searchButton.setOnClickListener(null);
-      searchButton.setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.animation_blink));
-    } else {
-      searchButton.clearAnimation();
-      searchButton.setOnClickListener(this);
-    }
-
+    getActivity().runOnUiThread(() -> {
+      if (loading) {
+        searchButton.setOnClickListener(null);
+        searchButton
+            .setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.animation_blink));
+      } else {
+        searchButton.clearAnimation();
+        searchButton.setOnClickListener(this);
+      }
+    });
   }
 
   @Override
   public void showDetailedInfo(Taxi taxi) {
 
   }
+
+  @Override
+  public void setError(int errorResId) {
+
+  }
+
 
   private <T extends View> T findById(View v, int id) {
     return v.findViewById(id);

@@ -36,7 +36,7 @@ public class TaxiRemoteDataSource implements TaxiDataSource {
 
   @Override
   public Observable<List<Taxi>> getTaxis() {
-    return Observable.create(observer -> new Thread(() -> loadTaxiData(observer, 0)).start());
+    return Observable.create(observer -> loadTaxiData(observer, 0));
   }
 
   private void loadTaxiData(Emitter<List<Taxi>> emitter, final int retry) {
@@ -48,6 +48,7 @@ public class TaxiRemoteDataSource implements TaxiDataSource {
       Response response = call.execute();
       List<Taxi> taxis = convertTaxis(response.body().string());
       emitter.onNext(taxis);
+      emitter.onComplete();
     } catch (IOException | NullPointerException e) {
       handleRetryException(emitter, retry);
     } catch (JSONException e) {
