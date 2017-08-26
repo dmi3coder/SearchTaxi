@@ -1,8 +1,11 @@
 package io.github.dmi3coder.searchtaxi.cars;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.BottomSheetBehavior.BottomSheetCallback;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -54,6 +57,19 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
     bottomSheetBehavior.setHideable(true);
     bottomSheetBehavior.setPeekHeight((int) Utils.convertDpToPixel(192, getContext()));
     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    bottomSheetBehavior.setBottomSheetCallback(new BottomSheetCallback() {
+      @Override
+      public void onStateChanged(@NonNull View bottomSheet, int newState) {
+      }
+
+      @Override
+      public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+        Log.d(TAG, "onSlide: " + slideOffset);
+        if(slideOffset<0) return;
+        int alpha = (int) (200 * slideOffset);
+        bottomSheet.setBackgroundColor(Color.argb(alpha, 255, 255, 255));
+      }
+    });
   }
 
   @Override
