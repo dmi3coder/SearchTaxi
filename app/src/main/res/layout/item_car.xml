@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:orientation="vertical"
   android:layout_width="match_parent"
   android:layout_height="192dp">
@@ -24,6 +25,76 @@
       android:clickable="true"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
+      <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="16dp">
+        <TextView
+          android:id="@+id/name"
+          tools:text="HH-XXXXXX"
+          android:layout_marginTop="24dp"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textSize="19sp"
+          />
+        <ImageView
+          android:id="@+id/icon_location"
+          android:layout_below="@id/name"
+          app:srcCompat="@drawable/ic_pin_drop"
+          android:layout_width="16dp"
+          android:layout_height="16dp"
+          android:layout_marginTop="4dp"/>
+
+        <TextView
+          android:id="@+id/text_location"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/name"
+          android:layout_marginLeft="8dp"
+          android:layout_toRightOf="@id/icon_location"
+          android:maxLines="2"
+          android:ellipsize="end"
+          android:layout_marginBottom="8dp"
+          tools:text="Feuerbergstraße 43, 22337 Hamburg (Umkreis 100m)"/>
+
+        <TextView
+          android:id="@+id/interior_title"
+          android:text="Interior:"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/text_location"
+
+          />
+        <TextView
+          android:id="@+id/exterior_title"
+          android:text="Exterior:"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_below="@id/interior_title"
+
+          />
+
+        <ImageView
+          android:id="@+id/icon_gas"
+          android:layout_below="@id/exterior_title"
+          android:layout_width="16dp"
+          android:layout_height="16dp"
+          app:srcCompat="@drawable/ic_fuel"
+          />
+
+        <ProgressBar
+          style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+          android:progress="25"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_toRightOf="@id/icon_gas"
+          android:layout_below="@id/exterior_title"
+          android:layout_marginLeft="8dp"
+          android:layout_marginRight="16dp"
+          />
+
+      </RelativeLayout>
+
     </android.support.v7.widget.CardView>
 
   </FrameLayout>
@@ -38,7 +109,6 @@
     app:layout_constraintBottom_toTopOf="@+id/cardView"
     android:layout_marginStart="16dp"
     android:layout_marginLeft="16dp"/>
-
 
 
 </android.support.constraint.ConstraintLayout>
