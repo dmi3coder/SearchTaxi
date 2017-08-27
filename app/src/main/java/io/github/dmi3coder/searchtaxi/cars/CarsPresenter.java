@@ -7,7 +7,6 @@ import io.github.dmi3coder.searchtaxi.data.Taxi;
 import io.github.dmi3coder.searchtaxi.data.source.TaxiRepository;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,14 +28,12 @@ public class CarsPresenter implements Presenter {
       view.setLoading(true);
       TaxiRepository.getInstance().getTaxis()
           .subscribe(cars -> {
-            this.cars = cars;
-            view.showCars(cars);
-            view.setLoading(false);
-          },
-          error -> {
-            view.setError(R.string.app_name);
-          }
-      );
+                this.cars = cars;
+                view.showCars(cars);
+                view.setLoading(false);
+              },
+              error -> view.setError(R.string.app_name)
+          );
     }).start();
   }
 

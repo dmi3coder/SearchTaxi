@@ -9,6 +9,7 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetBehavior.BottomSheetCallback;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -70,7 +71,7 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   private void setupBottomSheet() {
     bottomSheetBehavior = BottomSheetBehavior.from(mainList);
     bottomSheetBehavior.setHideable(true);
-    bottomSheetBehavior.setPeekHeight((int) Utils.convertDpToPixel(212, getContext()));
+    bottomSheetBehavior.setPeekHeight((int) Utils.convertDpToPixel(245, getContext()));
     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     bottomSheetBehavior.setBottomSheetCallback(new BottomSheetCallback() {
       @Override
@@ -167,7 +168,8 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
     getActivity().runOnUiThread(() -> {
       if (loading) {
         searchButton.setOnClickListener(null);
-        searchButton.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
+        searchButton.setBackgroundTintList(
+            ColorStateList.valueOf(ContextCompat.getColor(getContext(), R.color.colorAccent)));
         searchButton
             .startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.animation_blink));
       } else {

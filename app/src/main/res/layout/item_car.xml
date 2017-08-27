@@ -11,7 +11,7 @@
       android:id="@+id/card_holder"
       android:layout_width="0dp"
       android:layout_height="0dp"
-      android:layout_marginTop="16dp"
+      android:layout_marginTop="24dp"
       android:layout_marginBottom="8dp"
       android:layout_marginStart="16dp"
       android:layout_marginEnd="16dp"
@@ -108,7 +108,7 @@
       android:layout_height="36dp"
       android:layout_marginStart="16dp"
       android:layout_marginLeft="16dp"
-      android:src="@mipmap/ic_launcher"
+      app:srcCompat="@drawable/ic_taxi_avatar"
       app:layout_constraintBottom_toTopOf="@+id/card_holder"
       app:layout_constraintLeft_toLeftOf="@+id/card_holder"
       app:layout_constraintTop_toTopOf="@+id/card_holder"/>

@@ -5,11 +5,13 @@ package io.github.dmi3coder.searchtaxi;
  */
 public interface BaseContract {
 
-  interface BaseView<T extends BasePresenter>{
+  interface BaseView<T extends BasePresenter> {
+
     void setPresenter(T presenter);
   }
 
   interface BasePresenter {
+
     void start();
   }
 }

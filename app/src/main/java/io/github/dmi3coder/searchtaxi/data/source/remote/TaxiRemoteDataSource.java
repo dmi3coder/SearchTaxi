@@ -11,7 +11,6 @@ import io.reactivex.Emitter;
 import io.reactivex.Observable;
 import io.reactivex.exceptions.Exceptions;
 import java.io.IOException;
-import java.io.NotSerializableException;
 import java.lang.reflect.Type;
 import java.util.List;
 import okhttp3.Call;
@@ -26,6 +25,7 @@ import org.json.JSONObject;
  */
 public class TaxiRemoteDataSource implements TaxiDataSource {
 
+  public static final String REMOTE_URL = "http://redirect.mytaxi.net/car2go/vehicles.json";
   private static final String TAG = "TaxiRemoteDataSource";
   private OkHttpClient httpClient;
   private Moshi parser;
@@ -43,7 +43,7 @@ public class TaxiRemoteDataSource implements TaxiDataSource {
   @SuppressWarnings("ConstantConditions")
   private void loadTaxiData(Emitter<List<Taxi>> emitter, final int retry) {
     Call call = httpClient.newCall(new Request.Builder()
-        .url("http://redirect.mytaxi.net/car2go/vehicles.json")
+        .url(REMOTE_URL)
         .get()
         .build());
     try {

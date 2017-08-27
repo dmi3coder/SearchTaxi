@@ -9,7 +9,8 @@ import io.github.dmi3coder.searchtaxi.R;
 public enum ComparisonMark {
   GOOD(R.string.good_mark), UNACCEPTABLE(R.string.unacceptable_mark);
 
-  @StringRes int stringRes;
+  @StringRes
+  private int stringRes;
 
   ComparisonMark(int stringRes) {
     this.stringRes = stringRes;
