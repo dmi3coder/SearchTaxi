@@ -62,7 +62,7 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   private void setupBottomSheet() {
     bottomSheetBehavior = BottomSheetBehavior.from(mainList);
     bottomSheetBehavior.setHideable(true);
-    bottomSheetBehavior.setPeekHeight((int) Utils.convertDpToPixel(192, getContext()));
+    bottomSheetBehavior.setPeekHeight((int) Utils.convertDpToPixel(212, getContext()));
     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     bottomSheetBehavior.setBottomSheetCallback(new BottomSheetCallback() {
       @Override
