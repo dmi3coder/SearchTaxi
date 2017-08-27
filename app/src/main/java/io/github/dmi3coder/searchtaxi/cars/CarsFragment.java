@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -149,6 +150,7 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   public void showCars(List<Taxi> taxis) {
     Log.d(TAG, "showCars: ");
     getActivity().runOnUiThread(() -> {
+      googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(taxis.get(0).getLatLng(),10f));
       mainList.setLayoutManager(new LinearLayoutManager(getContext()));
       currentAdapter = new CarsAdapter(taxis, googleMap, bottomSheetBehavior);
       mainList.setAdapter(currentAdapter);
