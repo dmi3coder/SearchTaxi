@@ -10,8 +10,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -39,6 +43,7 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   private Presenter presenter;
   private SupportMapFragment mapfragment;
   private GoogleMap googleMap;
+  private MenuItem searchMenuItem;
 
   public CarsFragment() {
     new CarsPresenter(this);
@@ -48,6 +53,7 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   @Override
   public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
+    setHasOptionsMenu(true);
     View view = inflater.inflate(R.layout.fragment_cars, container, false);
     searchButton = findById(view, R.id.cars_search_fab);
     mainList = findById(view, R.id.cars_bottom_sheet);
@@ -67,6 +73,16 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
     bottomSheetBehavior.setBottomSheetCallback(new BottomSheetCallback() {
       @Override
       public void onStateChanged(@NonNull View bottomSheet, int newState) {
+        SearchView searchView = (SearchView) searchMenuItem.getActionView();
+        boolean showSearch = false;
+        if (newState == BottomSheetBehavior.STATE_EXPANDED) {
+          showSearch = true;
+          searchView.setIconified(false);
+        } else {
+          searchMenuItem.collapseActionView();
+        }
+        searchMenuItem.setEnabled(showSearch);
+        searchMenuItem.setVisible(showSearch);
       }
 
       @Override
@@ -90,6 +106,30 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   @Override
   public void onClick(View view) {
     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+  }
+
+  @Override
+  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.main_search, menu);
+    searchMenuItem = menu.findItem(R.id.action_search);
+    searchMenuItem.setEnabled(false);
+    searchMenuItem.setVisible(false);
+    SearchView searchView = (SearchView) searchMenuItem.getActionView();
+    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+      @Override
+      public boolean onQueryTextSubmit(String query) {
+        if (!searchView.isIconified()) {
+          searchView.setIconified(true);
+        }
+        searchMenuItem.collapseActionView();
+        return false;
+      }
+
+      @Override
+      public boolean onQueryTextChange(String s) {
+        return false;
+      }
+    });
   }
 
   @Override
