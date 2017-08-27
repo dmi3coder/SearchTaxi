@@ -18,16 +18,12 @@ public interface CarsContract {
 
     void setLoading(boolean loading);
 
-    void showDetailedInfo(Taxi taxi);
-
     void setError(@StringRes int errorResId);
   }
 
   interface Presenter extends BasePresenter {
 
     void requestReload();
-
-    void requestDetailedInfo(Taxi taxi);
 
     Single<List<Taxi>> filterData(String query);
 

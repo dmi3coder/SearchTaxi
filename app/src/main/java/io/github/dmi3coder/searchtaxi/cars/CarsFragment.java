@@ -179,11 +179,6 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
     });
   }
 
-  @Override
-  public void showDetailedInfo(Taxi taxi) {
-
-  }
-
   public boolean handleBack() {
     if ((bottomSheetBehavior.getState()
         & (BottomSheetBehavior.STATE_EXPANDED | BottomSheetBehavior.STATE_COLLAPSED)) != 0) {

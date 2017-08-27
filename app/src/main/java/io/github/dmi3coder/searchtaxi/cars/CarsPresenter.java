@@ -58,8 +58,4 @@ public class CarsPresenter implements Presenter {
     start();
   }
 
-  @Override
-  public void requestDetailedInfo(Taxi taxi) {
-
-  }
 }
