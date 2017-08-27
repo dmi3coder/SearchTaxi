@@ -43,7 +43,6 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   private BottomSheetBehavior<RecyclerView> bottomSheetBehavior;
   private RecyclerView mainList;
   private Presenter presenter;
-  private SupportMapFragment mapfragment;
   private GoogleMap googleMap;
   private MenuItem searchMenuItem;
   private CarsAdapter currentAdapter;
@@ -95,7 +94,6 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
 
       @Override
       public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-        Log.d(TAG, "onSlide: " + slideOffset);
         if (slideOffset < 0) {
           return;
         }
@@ -106,9 +104,9 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   }
 
   private void setupMap() {
-    mapfragment = (SupportMapFragment) getChildFragmentManager()
+    SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
         .findFragmentById(R.id.map);
-    mapfragment.getMapAsync(this);
+    mapFragment.getMapAsync(this);
   }
 
   @Override
@@ -150,7 +148,7 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   public void showCars(List<Taxi> taxis) {
     Log.d(TAG, "showCars: ");
     getActivity().runOnUiThread(() -> {
-      googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(taxis.get(0).getLatLng(),10f));
+      googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(taxis.get(0).getLatLng(), 10f));
       mainList.setLayoutManager(new LinearLayoutManager(getContext()));
       currentAdapter = new CarsAdapter(taxis, googleMap, bottomSheetBehavior);
       mainList.setAdapter(currentAdapter);
@@ -194,9 +192,7 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
     getActivity().runOnUiThread(() -> {
       searchButton.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
       searchButton.clearAnimation();
-      searchButton.setOnClickListener(view -> {
-        presenter.requestReload();
-      });
+      searchButton.setOnClickListener(view -> presenter.requestReload());
     });
 
   }

@@ -40,6 +40,7 @@ public class TaxiRemoteDataSource implements TaxiDataSource {
     return Observable.create(observer -> loadTaxiData(observer, 0));
   }
 
+  @SuppressWarnings("ConstantConditions")
   private void loadTaxiData(Emitter<List<Taxi>> emitter, final int retry) {
     Call call = httpClient.newCall(new Request.Builder()
         .url("http://redirect.mytaxi.net/car2go/vehicles.json")
@@ -71,7 +72,7 @@ public class TaxiRemoteDataSource implements TaxiDataSource {
     }
     Log.d(TAG, "loadTaxiData: something went wrong, retrying x" + retry);
     try {
-      Thread.sleep(1000);
+      Thread.sleep(2000);
       loadTaxiData(emitter, retry + 1);
     } catch (InterruptedException ignore) {
     }
