@@ -27,12 +27,14 @@ public class CarsPresenter implements Presenter {
   public void start() {
     new Thread(() -> {
       view.setLoading(true);
-      TaxiRepository.getInstance().getTaxis().subscribe(cars -> {
+      TaxiRepository.getInstance().getTaxis().doOnError(error -> {
+        view.setError(R.string.app_name);
+        view.setLoading(false);
+      }).subscribe(cars -> {
             this.cars = cars;
             view.showCars(cars);
           },
           error -> {
-            view.setError(R.string.app_name);
             view.setLoading(false);
           },
           () -> view.setLoading(false)

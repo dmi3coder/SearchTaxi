@@ -1,5 +1,6 @@
 package io.github.dmi3coder.searchtaxi.cars;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -170,6 +171,7 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
             .setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.animation_blink));
       } else {
         searchButton.clearAnimation();
+        searchButton.setAnimation(null);
         searchButton.setOnClickListener(this);
       }
     });
@@ -192,6 +194,9 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
 
   @Override
   public void setError(int errorResId) {
+    searchButton.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+    searchButton.clearAnimation();
+    searchButton.setEnabled(false);
 
   }
 
