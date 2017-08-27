@@ -9,6 +9,7 @@ import io.github.dmi3coder.searchtaxi.data.Taxi;
 import io.github.dmi3coder.searchtaxi.data.source.TaxiDataSource;
 import io.reactivex.Emitter;
 import io.reactivex.Observable;
+import io.reactivex.exceptions.Exceptions;
 import java.io.IOException;
 import java.io.NotSerializableException;
 import java.lang.reflect.Type;
@@ -52,7 +53,7 @@ public class TaxiRemoteDataSource implements TaxiDataSource {
     } catch (IOException | NullPointerException e) {
       handleRetryException(emitter, retry);
     } catch (JSONException e) {
-      emitter.onError(new NotSerializableException());
+      emitter.onError(Exceptions.propagate(new NetworkErrorException()));
     }
   }
 
@@ -65,7 +66,7 @@ public class TaxiRemoteDataSource implements TaxiDataSource {
 
   private void handleRetryException(Emitter<List<Taxi>> emitter, final int retry) {
     if (retry >= 4) {
-      emitter.onError(new NetworkErrorException());
+      emitter.onError(Exceptions.propagate(new NetworkErrorException()));
       return;
     }
     Log.d(TAG, "loadTaxiData: something went wrong, retrying x" + retry);

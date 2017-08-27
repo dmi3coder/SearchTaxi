@@ -167,11 +167,11 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
     getActivity().runOnUiThread(() -> {
       if (loading) {
         searchButton.setOnClickListener(null);
+        searchButton.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
         searchButton
-            .setAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.animation_blink));
+            .startAnimation(AnimationUtils.loadAnimation(getContext(), R.anim.animation_blink));
       } else {
         searchButton.clearAnimation();
-        searchButton.setAnimation(null);
         searchButton.setOnClickListener(this);
       }
     });
@@ -194,9 +194,13 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
 
   @Override
   public void setError(int errorResId) {
-    searchButton.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
-    searchButton.clearAnimation();
-    searchButton.setEnabled(false);
+    getActivity().runOnUiThread(() -> {
+      searchButton.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+      searchButton.clearAnimation();
+      searchButton.setOnClickListener(view -> {
+        presenter.requestReload();
+      });
+    });
 
   }
 
