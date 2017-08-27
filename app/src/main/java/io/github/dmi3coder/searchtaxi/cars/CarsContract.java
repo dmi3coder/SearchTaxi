@@ -4,6 +4,7 @@ import android.support.annotation.StringRes;
 import io.github.dmi3coder.searchtaxi.BaseContract.BasePresenter;
 import io.github.dmi3coder.searchtaxi.BaseContract.BaseView;
 import io.github.dmi3coder.searchtaxi.data.Taxi;
+import io.reactivex.Single;
 import java.util.List;
 
 /**
@@ -27,6 +28,10 @@ public interface CarsContract {
     void requestReload();
 
     void requestDetailedInfo(Taxi taxi);
+
+    Single<List<Taxi>> filterData(String query);
+
+    Single<List<Taxi>> clearFilter();
   }
 
 }

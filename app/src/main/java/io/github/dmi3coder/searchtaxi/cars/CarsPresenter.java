@@ -5,6 +5,10 @@ import io.github.dmi3coder.searchtaxi.cars.CarsContract.Presenter;
 import io.github.dmi3coder.searchtaxi.cars.CarsContract.View;
 import io.github.dmi3coder.searchtaxi.data.Taxi;
 import io.github.dmi3coder.searchtaxi.data.source.TaxiRepository;
+import io.reactivex.Observable;
+import io.reactivex.Single;
+import io.reactivex.disposables.Disposable;
+import java.util.List;
 
 /**
  * Created by dim3coder on 8/26/17.
@@ -12,6 +16,7 @@ import io.github.dmi3coder.searchtaxi.data.source.TaxiRepository;
 public class CarsPresenter implements Presenter {
 
   private View view;
+  private List<Taxi> cars;
 
   public CarsPresenter(View view) {
     this.view = view;
@@ -22,8 +27,10 @@ public class CarsPresenter implements Presenter {
   public void start() {
     new Thread(() -> {
       view.setLoading(true);
-      TaxiRepository.getInstance().getTaxis().subscribe(
-          view::showCars,
+      TaxiRepository.getInstance().getTaxis().subscribe(cars -> {
+            this.cars = cars;
+            view.showCars(cars);
+          },
           error -> {
             view.setError(R.string.app_name);
             view.setLoading(false);
@@ -32,6 +39,19 @@ public class CarsPresenter implements Presenter {
       );
     }).start();
   }
+
+  @Override
+  public Single<List<Taxi>> filterData(String query) {
+    return Observable.fromIterable(cars)
+        .filter(taxi -> taxi.getName().contains(query))
+        .toList();
+  }
+
+  @Override
+  public Single<List<Taxi>> clearFilter() {
+    return Single.just(cars);
+  }
+
 
   @Override
   public void requestReload() {

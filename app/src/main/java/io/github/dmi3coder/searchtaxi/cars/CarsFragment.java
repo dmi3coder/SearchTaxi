@@ -44,6 +44,7 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   private SupportMapFragment mapfragment;
   private GoogleMap googleMap;
   private MenuItem searchMenuItem;
+  private CarsAdapter currentAdapter;
 
   public CarsFragment() {
     new CarsPresenter(this);
@@ -75,11 +76,16 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
       public void onStateChanged(@NonNull View bottomSheet, int newState) {
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
         boolean showSearch = false;
-        if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-          showSearch = true;
-          searchView.setIconified(false);
-        } else {
-          searchMenuItem.collapseActionView();
+        switch (newState) {
+          case BottomSheetBehavior.STATE_EXPANDED:
+            showSearch = true;
+            searchView.setIconified(false);
+            break;
+          case BottomSheetBehavior.STATE_HIDDEN:
+            presenter.clearFilter().subscribe(currentAdapter::changeCars);
+          default:
+            searchMenuItem.collapseActionView();
+            break;
         }
         searchMenuItem.setEnabled(showSearch);
         searchMenuItem.setVisible(showSearch);
@@ -122,6 +128,7 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
           searchView.setIconified(true);
         }
         searchMenuItem.collapseActionView();
+        presenter.filterData(query).subscribe(currentAdapter::changeCars);
         return false;
       }
 
@@ -142,10 +149,10 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
     Log.d(TAG, "showCars: ");
     getActivity().runOnUiThread(() -> {
       mainList.setLayoutManager(new LinearLayoutManager(getContext()));
-      mainList.setAdapter(new CarsAdapter(taxis, googleMap, bottomSheetBehavior));
+      currentAdapter = new CarsAdapter(taxis, googleMap, bottomSheetBehavior);
+      mainList.setAdapter(currentAdapter);
       if (googleMap != null) {
-        for (int i = 0; i < taxis.size(); i++) {
-          Taxi taxi = taxis.get(i);
+        for (Taxi taxi : taxis) {
           googleMap.addMarker(new MarkerOptions()
               .position(taxi.getLatLng())
               .title(taxi.getName()));

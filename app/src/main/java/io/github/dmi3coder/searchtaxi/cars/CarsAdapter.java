@@ -42,6 +42,11 @@ public class CarsAdapter extends RecyclerView.Adapter<CarHolder> {
     super.onAttachedToRecyclerView(recyclerView);
   }
 
+  void changeCars(List<Taxi> cars) {
+    this.cars = cars;
+    notifyDataSetChanged();
+  }
+
   @Override
   public void onBindViewHolder(CarHolder holder, int position) {
     Taxi car = cars.get(position);
