@@ -1,11 +1,13 @@
 package io.github.dmi3coder.searchtaxi.data;
 
+import com.google.android.gms.maps.model.LatLng;
 import java.util.Arrays;
 
 /**
  * Created by dim3coder on 8/26/17.
  */
 public class Taxi {
+
   private String address;
   private Double[] coordinates;
   private String engineType;
@@ -93,6 +95,10 @@ public class Taxi {
 
   public void setVin(String vin) {
     this.vin = vin;
+  }
+
+  public LatLng getLatLng() {
+    return new LatLng(coordinates[1], coordinates[0]);
   }
 
   @Override

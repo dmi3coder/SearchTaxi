@@ -19,7 +19,6 @@ import android.view.animation.AnimationUtils;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import io.github.dmi3coder.searchtaxi.R;
 import io.github.dmi3coder.searchtaxi.Utils;
@@ -56,6 +55,7 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
     setupBottomSheet();
     setupMap();
     searchButton.setOnClickListener(this);
+    presenter.start();
     return view;
   }
 
@@ -102,12 +102,14 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
     Log.d(TAG, "showCars: ");
     getActivity().runOnUiThread(() -> {
       mainList.setLayoutManager(new LinearLayoutManager(getContext()));
-      mainList.setAdapter(new CarsAdapter(taxis,googleMap));
-      for (int i = 0; i < taxis.size(); i++) {
-        Taxi taxi = taxis.get(i);
-        googleMap.addMarker(new MarkerOptions()
-            .position(new LatLng(taxi.getCoordinates()[1], taxi.getCoordinates()[0]))
-            .title(taxi.getName()));
+      mainList.setAdapter(new CarsAdapter(taxis, googleMap, bottomSheetBehavior));
+      if (googleMap != null) {
+        for (int i = 0; i < taxis.size(); i++) {
+          Taxi taxi = taxis.get(i);
+          googleMap.addMarker(new MarkerOptions()
+              .position(taxi.getLatLng())
+              .title(taxi.getName()));
+        }
       }
     });
   }
@@ -154,6 +156,5 @@ public class CarsFragment extends Fragment implements CarsContract.View, OnClick
   @Override
   public void onMapReady(GoogleMap googleMap) {
     this.googleMap = googleMap;
-    presenter.start();
   }
 }
